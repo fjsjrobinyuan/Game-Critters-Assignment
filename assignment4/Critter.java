@@ -1,8 +1,8 @@
 /* CRITTERS Critter.java
  * ECE422C Project 3 submission by
  * Replace <...> with your actual data.
- * <Student Name>
- * <Student EID>
+ * Chenhe Yuan
+ * cy8368
  * Slip days used: <0>
  * Fall 2024
  */
@@ -46,13 +46,77 @@ public abstract class Critter {
         private int y_coord;
 
         protected final void walk(int direction) {
-        }
+		energy -= Params.walk_energy_cost;
+	
+		switch (direction) {
+			case 0: // Right
+				x_coord = (x_coord + 1) % Params.world_width;
+				break;
+			case 1: // Up-right
+				x_coord = (x_coord + 1) % Params.world_width;
+				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 2: // Up
+				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 3: // Up-left
+				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
+				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 4: // Left
+				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
+				break;
+			case 5: // Down-left
+				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
+				y_coord = (y_coord + 1) % Params.world_height;
+				break;
+			case 6: // Down
+				y_coord = (y_coord + 1) % Params.world_height;
+				break;
+			case 7: // Down-right
+				x_coord = (x_coord + 1) % Params.world_width;
+				y_coord = (y_coord + 1) % Params.world_height;
+				break;
+		}
+	}
 
         protected final void run(int direction) {
-
-        }
+		energy -= Params.run_energy_cost;
+	
+		switch (direction) {
+			case 0: // Right
+				x_coord = (x_coord + 2) % Params.world_width;
+				break;
+			case 1: // Up-right
+				x_coord = (x_coord + 2) % Params.world_width;
+				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				break;
+			case 2: // Up
+				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				break;
+			case 3: // Up-left
+				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
+				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				break;
+			case 4: // Left
+				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
+				break;
+			case 5: // Down-left
+				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
+				y_coord = (y_coord + 2) % Params.world_height;
+				break;
+			case 6: // Down
+				y_coord = (y_coord + 2) % Params.world_height;
+				break;
+			case 7: // Down-right
+				x_coord = (x_coord + 2) % Params.world_width;
+				y_coord = (y_coord + 2) % Params.world_height;
+				break;
+		}
+	}
 
         protected final void reproduce(Critter offspring, int direction) {
+                //???????这什么玩意儿
         }
 
         public abstract void doTimeStep();
@@ -69,7 +133,26 @@ public abstract class Critter {
          * @throws InvalidCritterException
          */
         public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-        }
+		try {
+			String qualifiedClassName = myPackage + "." + critter_class_name;
+
+			Class <?> critterClass = Class.forName(qualifiedClassName); //试一下能不能这样，感觉不太行
+
+			if (!Critter.class.isAssignableFrom(critterClass)) {
+				throw new InvalidCritterException(critter_class_name);
+			}
+
+			Critter newCritter = (Critter) critterClass.getDeclaredConstructor().newInstance();
+
+			newCritter.energy = Params.start_energy;
+			newCritter.x_coord = getRandomInt(Params.world_width);
+			newCritter.y_coord = getRandomInt(Params.world_height);
+
+			population.add(newCritter);
+		} catch (ClassNotFoundException e){
+			throw new InvalidCritterException(critter_class_name);
+		}
+	}
 
         /**
          * Gets a list of critters of a specific type.
@@ -78,11 +161,28 @@ public abstract class Critter {
          * @throws InvalidCritterException
          */
         public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-                List<Critter> result = new java.util.ArrayList<Critter>();
+		List<Critter> result = new java.util.ArrayList<Critter>();
+		
+		try {
+			String qualifiedClassName = myPackage + "." + critter_class_name;
 
-                return result;
-        }
+			Class<?> critterClass = Class.forName(qualifiedClassName);//用不同的critter试试
 
+			if (!Critter.class.isAssignableFrom(critterClass)) {
+				throw new InvalidCritterException(critter_class_name);
+			}
+
+			for (Critter each : population) {
+				if (critterClass.isInstance(each)) {
+					result.add(each);
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			throw new InvalidCritterException(critter_class_name);
+		}
+
+		return result;
+	}
         /**
          * Prints out how many Critters of each type there are on the board.
          * @param critters List of Critters.
