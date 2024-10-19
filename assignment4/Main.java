@@ -65,10 +65,105 @@ public class Main {
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
 
-        System.out.println("GLHF");
+        while (true) {
+            System.out.print("critters> ");
+            String input = kb.nextLine().trim();
+            String[] tokens = input.split("\\s+");
 
-        /* Write your code above */
-        System.out.flush();
+            if (tokens.length == 0 || tokens[0].equals("")) {
+                continue;
+            }
 
+            String command = tokens[0].toLowerCase();
+
+            try{
+                switch (command) {
+
+                    case "quit":
+                        System.out.flush();
+                        return;
+                    case "show":
+                        Critter.displayWorld();
+                        break;
+                    case "step":
+                        handleStep(tokens);
+                        break;
+                    case "make":
+                        handleMake(token);
+                        break;
+                    case "stats":
+                        handleStats(token);
+                        break;
+                    default:
+                        System.out.println("Invalid command: " + command);
+                }
+            } catch (Exception e) {
+                System.out.println("Error processing command: " + input);
+            }
+        }
+    }
+
+    private static void handleStep(String[] tokens) {
+        int count = 1;
+        if (tokens.length > 1) {
+            try{
+                count = Integer.parseInt(tokens[1]);
+            } 
+            catch (NumberFormatException e){
+                 System.out.println("Error: Invalid step count");
+                return;
+            }
+        }
+        for (int i =0; i < count; i++){
+            Critter.worldTimeStep();
+        }
+    }
+    private void handleMake(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: Missing critter class name");
+            return;
+        }
+
+        String critterClassName = tokens[1];
+        int count = 1;
+
+        if (tokens.length > 2) {
+            try {
+                count = Integer.parseInt(tokens[2]);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Invalid count");
+                return;
+            }
+        }
+        try {
+            for (int i = 0; i < count; i++) {
+                Critter.makeCritter(critterClassName);
+            }
+        } catch (InvalidCritterException e) {
+            System.out.println("Error: Invalid critter class name: " + critterClassName);
+        }
+
+        
+    }
+    private static void handleStats(String[] tokens) {
+        if (tokens.length < 2) {
+            System.out.println("Error: Missing critter class name");
+            return;
+        }
+    
+        String critterClassName = tokens[1];
+    
+        try {
+            List<Critter> instances = Critter.getInstances(critterClassName);
+            Class<?> critterClass = Class.forName(myPackage + "." + critterClassName);
+            java.lang.reflect.Method statsMethod = critterClass.getMethod("runStats", List.class);
+            statsMethod.invoke(null, instances);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error: Critter class not found");
+        } catch (NoSuchMethodException e) {
+            System.out.println("Error: runStats method not found for class: " + critterClassName);
+        } catch (Exception e) {
+            System.out.println("Error: Failed to invoke runStats method");
+        }
     }
 }
