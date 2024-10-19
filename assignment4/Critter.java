@@ -116,7 +116,47 @@ public abstract class Critter {
 	}
 
         protected final void reproduce(Critter offspring, int direction) {
-                //???????这什么玩意儿
+		if (this.energy < Params.min_reproduce_energy) {
+			return;
+		}
+
+		offspring.energy = this.energy / 2;
+		this.energy = (this.energy + 1) / 2;
+
+		offspring.x_coord = this.x_coord;
+		offsprint.y_coord = this.y_coord;
+
+		switch (direction) {
+			case 0: //right
+				offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+				break;
+			case 1: //upright
+				offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+				offspring.y_coord = (offspring.y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 2: //up
+				offspring.y_coord = (offspring.y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 3: //upleft
+				offspring.x_coord = (offspring.x_coord - 1 + Params.world_width) % Parmams.world_width;
+				offspring.y_coord = (offspring.y_coord - 1 + Params.world_height) % Params.world_height;
+				break;
+			case 4: //left
+				offspring.x_coord = (offspring.x_coord - 1 + Params.world_width) % Params.world_width;
+				break;
+			case 5: //downleft
+				offspring.x_coord = (offspring.x_coord - 1 + Params.world_width) % Params.world_width;
+				offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+				break;
+			case 6: //dwn
+				offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+				break;
+			case 7: //downright
+				offspring.x_coord = (offspring.x_coord + 1) % Params.world_width;
+				offspring.y_coord = (offspring.y_coord + 1) % Params.world_height;
+				break;
+
+		}
         }
 
         public abstract void doTimeStep();
@@ -263,10 +303,98 @@ public abstract class Critter {
          * Clear the world of all critters, dead and alive
          */
         public static void clearWorld() {
+		population.clear();
+		babies.clear();
         }
+
+	private static void juezhan(Critter crit1, Critter crit2) {
+		boolean crit1WantsToFight = crit1.fight(crit2.toString());
+		boolean crit2WantsToFight = crit2.fight(crit2.toString());
+
+		if (crit1.energy > 0 && crit2.energy < 0) {
+			int crit1Roll = crit1WantsToFight ? Critter.getRandomInt(crit1.energy) : 0;
+			int crit2Roll = crit2WantsToFight ? Critter.getRandomInt(crit2.energy) : 0;
+
+			if (crit1Roll>= cri2Roll) {
+				crit1.energy += crit2.energy / 2;
+				crit2.energy = 0;
+			} else {
+				crit2.energy += crit1.energy / 2;
+				crit1.energy = 0;
+			}
+		}
+	}
+
+	private static void resolveEncounters() {
+		for (int i = 0; i < population.size(); i++) {
+			Critter crit1 = population.get(i);
+			for (int j = i + 1; j < population.size(); j++) {
+				if (crit1.x_coord == crit2.x_coord && crit1.y_coord == crit2.y_coord) {
+					juezhan(crit1.crit2);
+				}
+			}
+		}
+	}
 
         public static void worldTimeStep() {
+		for (Critter each : population) {
+			each.doTimeStep();
+		}
+		
+		resolveEncounters();
+	
+		List<Critter> deadCritters = new ArrayList<>();
+		for (Critter each : population) {
+			each.energy -= Params.rest_energy_cost;
+			if (each.energy <= 0) {
+				deadCritters.add(each);
+			}
+		}
+		population.removeAll(deadCritters);
+	
+		population.addAll(babies);
+		babies.clear();
+
+		for (int i = 0; i < Params.refresh_algae_count; i++) {
+			try {
+				Critter.makeCritter("Algae");
+			} catch (InvalidCritterException e) {
+				e.printStackTrace();
+			}
+		}
         }
 
-        public static void displayWorld() {}
+        public static void displayWorld() {
+		String[][] worldGrid = new String[Params.world_height][Params.world_width];
+	
+		for (int y = 0; y < Params.world_height; y++) {
+			for (int x = 0; x < Params.world_width; x++) {
+				worldGrid[y][x] = " "; 
+			}
+		}
+		
+		for (Critter crit : population) {
+			worldGrid[crit.y_coord][crit.x_coord] = crit.toString();
+		}
+	
+		System.out.print("+");
+		for (int i = 0; i < Params.world_width; i++) {
+			System.out.print("-");
+		}
+		System.out.println("+");
+
+		for (int y = 0; y < Params.world_height; y++) {
+			System.out.print("|");
+			for (int x = 0; x < Params.world_width; x++) {
+				System.out.print(worldGrid[y][x]); 
+			}
+			System.out.println("|");
+		}
+	
+		System.out.print("+");
+		for (int i = 0; i < Params.world_width; i++) {
+			System.out.print("-");
+		}
+		System.out.println("+");
+	}
 }
