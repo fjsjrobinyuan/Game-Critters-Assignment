@@ -69,32 +69,32 @@ public abstract class Critter {
 	
 		switch (direction) {
 			case 0: // Right
-				x_coord = (x_coord + 1) % Params.world_width;
+				this.x_coord = (this.x_coord + 1) % Params.world_width;
 				break;
 			case 1: // Up-right
-				x_coord = (x_coord + 1) % Params.world_width;
-				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				this.x_coord = (this.x_coord + 1) % Params.world_width;
+				this.y_coord = (this.y_coord - 1 + Params.world_height) % Params.world_height;
 				break;
 			case 2: // Up
-				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				this.y_coord = (this.y_coord - 1 + Params.world_height) % Params.world_height;
 				break;
 			case 3: // Up-left
-				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
-				y_coord = (y_coord - 1 + Params.world_height) % Params.world_height;
+				this.x_coord = (this.x_coord - 1 + Params.world_width) % Params.world_width;
+				this.y_coord = (this.y_coord - 1 + Params.world_height) % Params.world_height;
 				break;
 			case 4: // Left
-				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
+				this.x_coord = (this.x_coord - 1 + Params.world_width) % Params.world_width;
 				break;
 			case 5: // Down-left
-				x_coord = (x_coord - 1 + Params.world_width) % Params.world_width;
-				y_coord = (y_coord + 1) % Params.world_height;
+				this.x_coord = (this.x_coord - 1 + Params.world_width) % Params.world_width;
+				this.y_coord = (this.y_coord + 1) % Params.world_height;
 				break;
 			case 6: // Down
-				y_coord = (y_coord + 1) % Params.world_height;
+				this.y_coord = (this.y_coord + 1) % Params.world_height;
 				break;
 			case 7: // Down-right
-				x_coord = (x_coord + 1) % Params.world_width;
-				y_coord = (y_coord + 1) % Params.world_height;
+				this.x_coord = (this.x_coord + 1) % Params.world_width;
+				this.y_coord = (this.y_coord + 1) % Params.world_height;
 				break;
 		}
 	}
@@ -107,32 +107,32 @@ public abstract class Critter {
 	
 		switch (direction) {
 			case 0: // Right
-				x_coord = (x_coord + 2) % Params.world_width;
+				this.x_coord = (this.x_coord + 2) % Params.world_width;
 				break;
 			case 1: // Up-right
-				x_coord = (x_coord + 2) % Params.world_width;
-				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				this.x_coord = (this.x_coord + 2) % Params.world_width;
+				this.y_coord = (this.y_coord - 2 + Params.world_height) % Params.world_height;
 				break;
 			case 2: // Up
-				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				this.y_coord = (this.y_coord - 2 + Params.world_height) % Params.world_height;
 				break;
 			case 3: // Up-left
-				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
-				y_coord = (y_coord - 2 + Params.world_height) % Params.world_height;
+				this.x_coord = (this.x_coord - 2 + Params.world_width) % Params.world_width;
+				this.y_coord = (this.y_coord - 2 + Params.world_height) % Params.world_height;
 				break;
 			case 4: // Left
-				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
+				this.x_coord = (this.x_coord - 2 + Params.world_width) % Params.world_width;
 				break;
 			case 5: // Down-left
-				x_coord = (x_coord - 2 + Params.world_width) % Params.world_width;
-				y_coord = (y_coord + 2) % Params.world_height;
+				this.x_coord = (this.x_coord - 2 + Params.world_width) % Params.world_width;
+				this.y_coord = (this.y_coord + 2) % Params.world_height;
 				break;
 			case 6: // Down
-				y_coord = (y_coord + 2) % Params.world_height;
+				this.y_coord = (this.y_coord + 2) % Params.world_height;
 				break;
 			case 7: // Down-right
-				x_coord = (x_coord + 2) % Params.world_width;
-				y_coord = (y_coord + 2) % Params.world_height;
+				this.x_coord = (this.x_coord + 2) % Params.world_width;
+				this.y_coord = (this.y_coord + 2) % Params.world_height;
 				break;
 		}
 	}
