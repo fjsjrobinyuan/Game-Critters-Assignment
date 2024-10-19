@@ -29,10 +29,18 @@ public abstract class Critter {
 	}
 	
 	private static java.util.Random rand = new java.util.Random();
+	/**
+ 	 * This one returns a random integer between 0 (inclusive) and max (exclusive).
+   	 * @param max The upper bound for random integer generation.
+         * @return Return a random integer between 0 (inclusive) and max (exclusive).
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
 	}
-	
+
+	/**
+	 * Sets a new seed for the random number generator.
+	 * @param new_seed The seed for the random number generator.
+	 */
 	public static void setSeed(long new_seed) {
 		rand = new java.util.Random(new_seed);
 	}
@@ -42,11 +50,19 @@ public abstract class Critter {
 	public String toString() { return ""; }
 	
 	private int energy = 0;
+	/**
+	 * Gets the energy of the critter.
+	 * @return The current energy level of the critter.
+	 */
 	protected int getEnergy() { return energy; }
 	
 	private int x_coord;
 	private int y_coord;
-	
+
+	/**
+	 * Moves the critter one step in the given direction and reduces its energy accordingly.
+	 * @param direction The direction in which the critter should move.
+	 */
 	protected final void walk(int direction) {
 		energy -= Params.walk_energy_cost;
 	
@@ -81,7 +97,10 @@ public abstract class Critter {
 				break;
 		}
 	}
-	
+	/**
+	 * Moves the critter two steps in the given direction and reduces its energy accordingly.
+	 * @param direction The direction in which the critter should move.
+	 */
 	protected final void run(int direction) {
 		energy -= Params.run_energy_cost;
 	
@@ -117,7 +136,11 @@ public abstract class Critter {
 		}
 	}
 	
-	
+	/**
+	 * Creates an offspring critter and moves it one step in the specified direction.
+	 * @param offspring The offspring critter to be created.
+	 * @param direction The direction in which the offspring should move.
+	 */
 	protected final void reproduce(Critter offspring, int direction) {
 		if (this.energy < Params.min_reproduce_energy) {
 			return;
@@ -163,7 +186,15 @@ public abstract class Critter {
 		babies.add(offspring);
 	}
 
+	/**
+	 * Abstract method that defines the actions taken by a critter at each time step.
+	 */
 	public abstract void doTimeStep();
+	/**
+	 * Abstract method that defines the behavior of a critter during an encounter with another critter.
+	 * @param oponent A string representation of the opposing critter.
+	 * @return true if this critter chooses to fight, false otherwise.
+	 */
 	public abstract boolean fight(String oponent);
 	
 	/**
@@ -312,7 +343,12 @@ public abstract class Critter {
 
 		babies.clear();
 	}
-
+	
+	/**
+	 * Conducts a simulated encounter between two Critters.
+	 * @param crit1 The first Critter.
+	 * @param crit2 The second Critter.
+	 */
 	private static void juezhan(Critter crit1, Critter crit2) {
 		boolean crit1WantsToFight = crit1.fight(crit2.toString());
 		boolean crit2WantsToFight = crit2.fight(crit1.toString());
@@ -330,7 +366,9 @@ public abstract class Critter {
 				}
 		}
 	}
-
+	/**
+	 * Resolves all encounters between Critters in the same location.
+	 */
 	private static void resolveEncounters() {
 		for (int i = 0; i < population.size(); i++) {
 			Critter crit1 = population.get(i);
@@ -344,7 +382,9 @@ public abstract class Critter {
 			}
 		}
 	}
-	
+	/**
+	 * Advances the world by one time step, updating Critters and resolving events.
+	 */
 	public static void worldTimeStep() {
 		// Step 1: Execute doTimeStep for each critter
 		for (Critter each : population) {
@@ -378,7 +418,9 @@ public abstract class Critter {
 		}
 	}
 	
-	
+	/**
+	 * Displays the current state of the world in a text-based format.
+	 */
 	public static void displayWorld() {
 		// Create a 2D array to represent the world
 		String[][] worldGrid = new String[Params.world_height][Params.world_width];
