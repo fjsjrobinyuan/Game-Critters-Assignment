@@ -68,35 +68,39 @@ public class Main {
         /**
          * Main loop, also handles commands like make and stats and so on.
          */
-        while (true) {
+       while (true) {
             System.out.print("critters> ");
             String input = kb.nextLine().trim();
             String[] tokens = input.split("\\s+");
 
             if (tokens.length == 0 || tokens[0].equals("")) {
-                continue;
+                continue;  // Ignore empty input
             }
 
             String command = tokens[0].toLowerCase();
 
-            try{
+            try {
                 switch (command) {
-
                     case "quit":
-                        System.out.flush();
-                        return;
+                        System.out.flush();  // Flush the output before quitting
+                        return;  // Exit the simulation
+
                     case "show":
                         Critter.displayWorld();
                         break;
+
                     case "step":
                         handleStep(tokens);
                         break;
+
                     case "make":
-                        handleMake(token);
+                        handleMake(tokens);
                         break;
+
                     case "stats":
-                        handleStats(token);
+                        handleStats(tokens);
                         break;
+
                     default:
                         System.out.println("Invalid command: " + command);
                 }
@@ -111,17 +115,16 @@ public class Main {
       * @param tokens The command tokens, where tokens[1] specifies the number of steps
       */
     private static void handleStep(String[] tokens) {
-        int count = 1;
+        int count = 1;  // Default to one step
         if (tokens.length > 1) {
-            try{
+            try {
                 count = Integer.parseInt(tokens[1]);
-            } 
-            catch (NumberFormatException e){
-                 System.out.println("Error: Invalid step count");
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Invalid step count");
                 return;
             }
         }
-        for (int i =0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             Critter.worldTimeStep();
         }
     }
@@ -130,14 +133,14 @@ public class Main {
       * Handles the make command, this will make one or more instances.
       * @param tokens same.
       */
-    private void handleMake(String[] tokens) {
+   private static void handleMake(String[] tokens) {
         if (tokens.length < 2) {
             System.out.println("Error: Missing critter class name");
             return;
         }
 
         String critterClassName = tokens[1];
-        int count = 1;
+        int count = 1;  // Default to one instance
 
         if (tokens.length > 2) {
             try {
@@ -147,6 +150,7 @@ public class Main {
                 return;
             }
         }
+
         try {
             for (int i = 0; i < count; i++) {
                 Critter.makeCritter(critterClassName);
@@ -154,10 +158,7 @@ public class Main {
         } catch (InvalidCritterException e) {
             System.out.println("Error: Invalid critter class name: " + critterClassName);
         }
-
-        
     }
-
     /**
       * handles the stats command, which will display the status of a critter.
       * @param tokens same.
@@ -183,4 +184,5 @@ public class Main {
             System.out.println("Error: Failed to invoke runStats method");
         }
     }
+
 }
