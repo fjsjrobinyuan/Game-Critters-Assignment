@@ -7,6 +7,7 @@
  * Fall 2024
  */
 package assignment4; // cannot be in default package
+import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 
@@ -18,12 +19,12 @@ import java.io.*;
  */
 public class Main {
 
-    static Scanner kb;  // scanner connected to keyboard input, or input file
-    private static String inputFile;    // input file, used instead of keyboard input if specified
-    static ByteArrayOutputStream testOutputString;      // if test specified, holds all console output
-    private static String myPackage;    // package of Critter file.  Critter cannot be in default pkg.
+    static Scanner kb;	// scanner connected to keyboard input, or input file
+    private static String inputFile;	// input file, used instead of keyboard input if specified
+    static ByteArrayOutputStream testOutputString;	// if test specified, holds all console output
+    private static String myPackage;	// package of Critter file.  Critter cannot be in default pkg.
     private static boolean DEBUG = false; // Use it or not, as you wish!
-    static PrintStream old = System.out;        // if you want to restore output to console
+    static PrintStream old = System.out;	// if you want to restore output to console
 
 
     // Gets the package name.  The usage assumes that Critter and its subclasses are all in the same package.
@@ -33,14 +34,14 @@ public class Main {
 
     /**
      * Main method.
-     * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name,
+     * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name, 
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
      */
-    public static void main(String[] args) {
+        public static void main(String[] args) { 
         if (args.length != 0) {
             try {
                 inputFile = args[0];
-                kb = new Scanner(new File(inputFile));
+                kb = new Scanner(new File(inputFile));			
             } catch (FileNotFoundException e) {
                 System.out.println("USAGE: java Main OR java Main <input file> <test output>");
                 e.printStackTrace();
@@ -65,10 +66,22 @@ public class Main {
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
 
-        /**
+        // Create 100 Algae and 25 Craig critters initially
+        try {
+            for (int i = 0; i < 100; i++) {
+                Critter.makeCritter("Algae");
+            }
+            for (int i = 0; i < 25; i++) {
+                Critter.makeCritter("Craig");
+            }
+        } catch (InvalidCritterException e) {
+            System.out.println("Error: Failed to initialize starting critters.");
+        }
+
+         /**
          * Main loop, also handles commands like make and stats and so on.
          */
-       while (true) {
+        while (true) {
             System.out.print("critters> ");
             String input = kb.nextLine().trim();
             String[] tokens = input.split("\\s+");
@@ -110,7 +123,7 @@ public class Main {
         }
     }
 
-    /**
+   /**
       * Handles the 'step' command to advance the simulation by one or more time steps.
       * @param tokens The command tokens, where tokens[1] specifies the number of steps
       */
@@ -133,7 +146,7 @@ public class Main {
       * Handles the make command, this will make one or more instances.
       * @param tokens same.
       */
-   private static void handleMake(String[] tokens) {
+    private static void handleMake(String[] tokens) {
         if (tokens.length < 2) {
             System.out.println("Error: Missing critter class name");
             return;
@@ -159,6 +172,8 @@ public class Main {
             System.out.println("Error: Invalid critter class name: " + critterClassName);
         }
     }
+
+    
     /**
       * handles the stats command, which will display the status of a critter.
       * @param tokens same.
