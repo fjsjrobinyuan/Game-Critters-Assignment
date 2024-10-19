@@ -65,6 +65,9 @@ public class Main {
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
 
+        /**
+         * Main loop, also handles commands like make and stats and so on.
+         */
         while (true) {
             System.out.print("critters> ");
             String input = kb.nextLine().trim();
@@ -103,6 +106,10 @@ public class Main {
         }
     }
 
+    /**
+      * Handles the 'step' command to advance the simulation by one or more time steps.
+      * @param tokens The command tokens, where tokens[1] specifies the number of steps
+      */
     private static void handleStep(String[] tokens) {
         int count = 1;
         if (tokens.length > 1) {
@@ -118,6 +125,11 @@ public class Main {
             Critter.worldTimeStep();
         }
     }
+
+    /**
+      * Handles the make command, this will make one or more instances.
+      * @param tokens same.
+      */
     private void handleMake(String[] tokens) {
         if (tokens.length < 2) {
             System.out.println("Error: Missing critter class name");
@@ -145,6 +157,11 @@ public class Main {
 
         
     }
+
+    /**
+      * handles the stats command, which will display the status of a critter.
+      * @param tokens same.
+      */
     private static void handleStats(String[] tokens) {
         if (tokens.length < 2) {
             System.out.println("Error: Missing critter class name");
