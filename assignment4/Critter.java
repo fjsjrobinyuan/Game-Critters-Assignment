@@ -33,6 +33,7 @@ public abstract class Critter {
  	 * This one returns a random integer between 0 (inclusive) and max (exclusive).
    	 * @param max The upper bound for random integer generation.
          * @return Return a random integer between 0 (inclusive) and max (exclusive).
+	 */
 	public static int getRandomInt(int max) {
 		return rand.nextInt(max);
 	}
