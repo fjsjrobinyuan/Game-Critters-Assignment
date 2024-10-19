@@ -330,7 +330,7 @@ public abstract class Critter {
 			Critter crit1 = population.get(i);
 			for (int j = i + 1; j < population.size(); j++) {
 				if (crit1.x_coord == crit2.x_coord && crit1.y_coord == crit2.y_coord) {
-					juezhan(crit1.crit2);
+					juezhan(crit1,crit2);
 				}
 			}
 		}
